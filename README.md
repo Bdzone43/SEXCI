@@ -50,54 +50,10 @@ Before running Sexcie, ensure you have the following installed:
 
 1. Run the bot:
    ```bash
-   python sexcie.py
+   python main.py
    ```
-
-2. Enter a credit card number when prompted.
-
-3. The bot will validate the number and display the result (e.g., valid or invalid).
-
 ---
 
-## Example
-
-```bash
-$ python sexcie.py
-Enter credit card number: 4111111111111111
-Valid credit card number.
-
-$ python sexcie.py
-Enter credit card number: 1234567890123456
-Invalid credit card number.
-```
-
----
-
-## Code Overview
-
-### Main Script
-
-The `sexcie.py` script contains:
-
-- Input handling for credit card numbers.
-- Implementation of the Luhn algorithm.
-- Validation result output.
-
-### Key Function
-
-```python
-def luhn_check(card_number):
-    total = 0
-    reverse_digits = card_number[::-1]
-    for i, digit in enumerate(reverse_digits):
-        n = int(digit)
-        if i % 2 == 1:
-            n *= 2
-            if n > 9:
-                n -= 9
-        total += n
-    return total % 10 == 0
-```
 
 ---
 
