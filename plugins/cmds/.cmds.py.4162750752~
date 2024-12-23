@@ -1,0 +1,94 @@
+from pyrogram import Client, filters
+from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+
+from db import *
+from gengen import *
+
+# ... (your other imports)
+
+# Define the filter for the /cmds command
+@Client.on_message(filters.command(["cmds", "start"], ["/", "."]))
+async def cmds_command(client, message):
+    print("Received /cmds or /start command")  # Debug statement
+
+    user_id = message.from_user.id
+
+    query = f"SELECT username, status, expiration_date, creditos FROM users WHERE user_id='{user_id}'"
+    try:
+        cursor.execute(query)
+        result = cursor.fetchone()
+    except Exception as e:
+        print(f"Error executing SQL query: {e}")  # Debug statement
+        result = None
+
+    if result is None:
+        await client.send_message(message.chat.id, "No estás registrado. Por favor, utiliza /register para registrarte.")
+        return
+
+    video_path = "https://telegra.ph/file/8412cb157c94d03b14aa2.gif"
+    caption = """<b>Hello My name is azuna chk it is a pleasure to meet you press the buttons below to know more about me</b>"""
+
+    keyboard = InlineKeyboardMarkup(
+        [
+            [InlineKeyboardButton("📿 tools", callback_data="tools"), InlineKeyboardButton("📿 Gateways", callback_data="gates")],
+            [InlineKeyboardButton("📿 Profile", callback_data="me")],
+        ]
+    )
+
+    await client.send_video(message.chat.id, video_path, caption=caption, reply_markup=keyboard, reply_to_message_id=message.id)
+    print("Video message sent successfully")  # Debug statement
+
+@Client.on_callback_query()
+async def handle_buttons(client, callback_query):
+    print("Callback query received")  # Debug statement
+
+    data = callback_query.data
+    user_id = callback_query.from_user.id
+
+    query = f"SELECT username, status, expiration_date, creditos FROM users WHERE user_id='{user_id}'"
+    try:
+        cursor.execute(query)
+        result = cursor.fetchone()
+    except Exception as e:
+        print(f"Error executing SQL query: {e}")  # Debug statement
+        result = None
+
+    if result is None:
+        await client.send_message(callback_query.message.chat.id, "No estás registrado. Por favor, utiliza /register para registrarte.")
+        return
+
+    if result:
+        rank = result[1]
+        expiration = result[2]
+        creditos = result[3]
+    else:
+        rank = None
+
+    print(f"Profile button pressed. User ID: {user_id}, Rank: {rank}, Expiration: {expiration}, Creditos: {creditos}")  # Debug statement
+
+    keyboard = InlineKeyboardMarkup(
+        [
+            [InlineKeyboardButton("back", callback_data="back")],
+        ]
+    )
+
+    try:
+        # Check if callback_query.message is not None before editing
+        if callback_query.message:
+            await client.edit_message_text(
+                chat_id=callback_query.message.chat.id,
+                message_id=callback_query.message.message_id,
+                text=f"""
+♻️ Profile Information 
+━━━━━━━━━━━━━━━━━━
+⚜️ User: 
+➳ ID: <code>{user_id}</code>
+➤ Rango: <code>{rank}</code>
+📛 Fecha De Expiración: <code>{expiration}</code>
+🔑 Créditos: <code>{creditos}</code>
+━━━━━━━━━━━━━━━━━━""",
+                parse_mode="HTML",
+                reply_markup=keyboard
+            )
+    except Exception as e:
+        print(f"Error editing message: {e}")  # Debug statement

@@ -1,0 +1,20 @@
+{
+  "files": {
+    "main.py": [
+      {
+        "id": "b9e36d34-c956-4387-8929-8bf163af959d",
+        "line": 1,
+        "version": 134,
+        "index": 0
+      }
+    ],
+    "plugins/cmds/cmds.py": [
+      {
+        "id": "92eb2991-7c26-4b35-86e0-b1d4b6629abd",
+        "line": 1,
+        "version": 607,
+        "index": 0
+      }
+    ]
+  }
+}
