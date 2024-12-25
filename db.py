@@ -1,9 +1,9 @@
 import mysql.connector
 db = mysql.connector.connect(
-    host="sbjte.h.filess.io",
-    user="hello_presentten",
-    password="715e84eaadc57416103cc250def8413da5ecfa62",
-    database="hello_presentten"
+    host="3jpe8.h.filess.io",
+    user="Database6998699_chargeifup",
+    password="50db5987a443f2abcb5ae99c8e52c0e88ef36c56",
+    database="Database6998699_chargeifup"
 )
 
 cursor = db.cursor()
